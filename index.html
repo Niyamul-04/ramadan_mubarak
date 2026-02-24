@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+<head> 
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Ramadan Light · Responsive Hand Draw</title>
@@ -125,7 +125,7 @@
   <div class="lantern">🏮🏮🏮🏮</div>
   <div class="branding">رمضان كريم</div>
   <div class="instructions">
-    ☝🏽 Finger Move · SHIFT Draw
+    ☝🏽 Finger Move · SHIFT/Touch Draw
   </div>
 
   <video id="vid" playsinline></video>
@@ -157,7 +157,6 @@
       resizeCanvas();
 
       function onHandResults(results) {
-     
         const grad = ctx.createLinearGradient(0, 0, 0, canvas.height);
         grad.addColorStop(0, '#0f0c08');
         grad.addColorStop(1, '#050301');
@@ -233,10 +232,11 @@
 
       clearBtn.onclick = () => { strokes = []; };
 
-      eraseBtn.addEventListener('pointerdown', () => { eraseMode = true; eraseBtn.classList.add('active'); });
+      eraseBtn.addEventListener('pointerdown', (e) => { e.stopPropagation(); eraseMode = true; eraseBtn.classList.add('active'); });
       eraseBtn.addEventListener('pointerup', () => { eraseMode = false; eraseBtn.classList.remove('active'); });
       eraseBtn.addEventListener('pointerleave', () => { eraseMode = false; eraseBtn.classList.remove('active'); });
 
+      // Keyboard Controls
       window.addEventListener('keydown', (e) => {
         if (e.key === 'Shift') shiftPressed = true;
         if (e.code === 'Space') strokes = [];
@@ -244,6 +244,15 @@
       window.addEventListener('keyup', (e) => {
         if (e.key === 'Shift') shiftPressed = false;
       });
+
+      // Mobile/Android Touch Draw Support
+      window.addEventListener('pointerdown', (e) => {
+          if(e.target.tagName !== 'BUTTON') shiftPressed = true;
+      });
+      window.addEventListener('pointerup', () => {
+          shiftPressed = false;
+      });
+
     })();
   </script>
 </body>
